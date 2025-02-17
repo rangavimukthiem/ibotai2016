@@ -1,0 +1,124 @@
+/* Global Styles */
+QWidget {
+    background-color: #A3D1C6;
+    font-family: "Arial";
+    font-size: 14px;
+    color: #333;
+}
+
+/* QLabel Styles */
+QLabel {
+    color: #444;
+    font-weight: bold;
+    padding: 5px;
+}
+
+/* QTextEdit Styles */
+QTextEdit {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 5px;
+    font-family: "Courier New";
+}
+
+/* QPushButton Styles */
+QPushButton {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+QPushButton:hover {
+    background-color: #45a049;
+}
+
+QPushButton:pressed {
+    background-color: #3c8d40;
+}
+
+/* QComboBox Styles */
+QComboBox {
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+QComboBox::drop-down {
+    border: none;
+}
+
+QComboBox QAbstractItemView {
+    background: #fff;
+    selection-color: white;
+    selection-background-color: #4CAF50;
+}
+
+/* QLabel Styles for Combo Box Title */
+QLabel[role='combo_box_label'] {
+    font-size: 14px;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+/* Camera Label Border */
+QLabel[role='camera_label'] {
+    border: 2px solid black;
+    background-color: #f0f0f0;
+}
+
+/* QVBoxLayout and QHBoxLayout are invisible elements, but we use widgets inside them */
+
+/* Scrollbars for QTextEdit */
+QScrollBar:vertical {
+    background: #ddd;
+    width: 12px;
+}
+
+QScrollBar::handle:vertical {
+    background: #888;
+    min-height: 20px;
+    border-radius: 4px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: none;
+}
+QTextEdit {
+    background-color: #2C3930;
+    color: #06D001;
+    border: 1px solid #26355D;
+}
+
+/* Customize Logs Output Section */
+self.log_output.setObjectName("logtext")
+QTextEdit#logtext {
+    background-color: #2C3930;
+    color:#06D001;
+    border: 1px solid #26355D;
+}
+QPlainTextEdit#logtext {
+    background-color: #2C3930;
+    color: #06D001;
+    border: 1px solid #26355D;
+}
+
+#------------------------------Unique styles for back buttons-------------------------------------------
+# Set a unique object name for the back button
+self.home_btn.setObjectName("backButton")
+
+# Add a custom stylesheet for the back button
+self.home_btn.setStyleSheet("""
+    QPushButton#backButton {
+        background-color: #F44336; /* Red */
+    }
+
+    QPushButton#backButton:hover {
+        background-color: #D32F2F; /* Darker Red */
+    }
+""")
+#-------------------------------------------------------------------------------------------------
