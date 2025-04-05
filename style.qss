@@ -10,26 +10,41 @@ QWidget {
 QLabel {
     color: #444;
     font-weight: bold;
-    padding: 5px;
+    font-size: 15px;  /* Fixed missing semicolon */
+    padding: 10px;
+    margin: 10px;
+    background-color: #d2fae7;
+    border-radius: 8px;
 }
 
 /* QTextEdit Styles */
-QTextEdit {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 5px;
+QTextEdit, QPlainTextEdit {
+    background-color: #d2fae7;
+    color: #444;
+    border: 1px solid #26355D;
     font-family: "Courier New";
+    padding: 5px;
+    font-size:18px;
+
+}
+
+/* Overlay Widget */
+QWidget#OverlayWidget {
+    background-color: rgba(10, 10, 30, 50);
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
 }
 
 /* QPushButton Styles */
 QPushButton {
-    background-color: #4CAF50;
-    color: white;
-    padding: 8px 16px;
+    background-color: #3CAF50;  /* Green background */
+    color: white;               /* White text */
     border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 QPushButton:hover {
@@ -37,7 +52,7 @@ QPushButton:hover {
 }
 
 QPushButton:pressed {
-    background-color: #3c8d40;
+    background-color: #388e3c;
 }
 
 /* QComboBox Styles */
@@ -71,8 +86,6 @@ QLabel[role='camera_label'] {
     background-color: #f0f0f0;
 }
 
-/* QVBoxLayout and QHBoxLayout are invisible elements, but we use widgets inside them */
-
 /* Scrollbars for QTextEdit */
 QScrollBar:vertical {
     background: #ddd;
@@ -85,40 +98,27 @@ QScrollBar::handle:vertical {
     border-radius: 4px;
 }
 
-QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
     background: none;
 }
-QTextEdit {
-    background-color: #2C3930;
-    color: #06D001;
-    border: 1px solid #26355D;
+
+/* Unique Styles for Specific Buttons */
+QPushButton#backButton {
+    background-color: #F44336; /* Red */
 }
 
-/* Customize Logs Output Section */
-self.log_output.setObjectName("logtext")
-QTextEdit#logtext {
-    background-color: #2C3930;
-    color:#06D001;
-    border: 1px solid #26355D;
-}
-QPlainTextEdit#logtext {
-    background-color: #2C3930;
-    color: #06D001;
-    border: 1px solid #26355D;
+QPushButton#backButton:hover {
+    background-color: #D32F2F; /* Darker Red */
 }
 
-#------------------------------Unique styles for back buttons-------------------------------------------
-# Set a unique object name for the back button
-self.home_btn.setObjectName("backButton")
+QPushButton#navigationButtons {
+    background-color: #F44336; /* Red */
+}
 
-# Add a custom stylesheet for the back button
-self.home_btn.setStyleSheet("""
-    QPushButton#backButton {
-        background-color: #F44336; /* Red */
-    }
-
-    QPushButton#backButton:hover {
-        background-color: #D32F2F; /* Darker Red */
-    }
-""")
-#-------------------------------------------------------------------------------------------------
+QPushButton#navigationButtons:hover {
+    background-color: #D32F2F; /* Darker Red */
+}
+QPushButton#navigationButtons:active {
+    background-color: #c32F2F; /* Darker Red */
+}
