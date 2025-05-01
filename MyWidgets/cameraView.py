@@ -47,6 +47,8 @@ class CameraView(QWidget):
         self.camera_label.setScaledContents(True)
 
         layout = QVBoxLayout()
+        self.Camera_box_label = QLabel("RealTime View")
+        layout.addWidget(self.Camera_box_label)
         layout.addWidget(self.camera_label)
         self.setLayout(layout)
 
@@ -57,14 +59,14 @@ class CameraView(QWidget):
             print(f"Start camera thread error: {e}")
 
     def update_pixmap(self, frame_rgb):
-        # print("update pixmap signal recieved...")
-
-        self.latest_image=frame_rgb
+        # print(f"update pixmap signal recieved...{id(frame_rgb)}")
 
         if self.shoot:
             self.capture_image(frame_rgb)
-
         try:
+            self.latest_image = frame_rgb.copy()
+            # print(f"type of frame feed {type(frame_rgb)}")
+
 
             height, width, channel = frame_rgb.shape
             image = QImage(frame_rgb.data, width, height, width * channel, QImage.Format_RGB888)
@@ -72,6 +74,7 @@ class CameraView(QWidget):
             self.camera_label.setPixmap(
                 pixmap.scaled(self.camera_label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
             self.shoot=False
+            self.frame_feed.emit(frame_rgb)
         except Exception as e:
             print(f"Updating pixmap error: {e}")
 
@@ -86,6 +89,7 @@ class CameraView(QWidget):
         try:
             date_stamp = get_current_datetime()
             save_path = os.path.join(CameraView._capture_dir, f"captured_{date_stamp}.jpg")
+            os.makedirs(CameraView._capture_dir, exist_ok=True)
             rgb_image=cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
             cv2.imwrite(save_path, rgb_image)
 

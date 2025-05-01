@@ -31,8 +31,7 @@ class HomeScreen(QWidget):
 
 
         # Widget Arrangement Body layout
-        self.Camera_box_label = QLabel("RealTime View")
-        self.Camera_box_layout.addWidget(self.Camera_box_label)
+
         self.camera=CameraView()
 
         self.Camera_box_layout.addWidget(self.camera)

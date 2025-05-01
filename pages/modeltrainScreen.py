@@ -16,10 +16,12 @@ from MyWidgets import MyAppException, CustomExceptionLogBox
 from MyWidgets import CameraView
 from utils import find_files_by_extension, get_current_datetime
 
+
 # from utils import find_files_by_extension, get_current_datetime
 
 class ModelTrainScreen(QWidget):
-    newModel_trained_Signal=pyqtSignal(bool)
+    newModel_trained_Signal = pyqtSignal(bool)
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent_window = parent
@@ -33,7 +35,6 @@ class ModelTrainScreen(QWidget):
         self.capture_dir = "captured/"
         self.captured_image = None
 
-
         # Combo Box for Model Selection
         self.new_Model_name_label = QLabel("Create New Model", self)
         self.new_Model_name_label.setFixedHeight(40)
@@ -42,11 +43,8 @@ class ModelTrainScreen(QWidget):
         self.new_Model_name = f"{self.new_Model_name_field.toPlainText()}.h5"
         # Connect signals to slots
 
-
-
         self.setWindowTitle("Train your iBot ")
         self.setGeometry(100, 100, 1200, 800)
-
 
         # Create Buttons
         self.train_model_btn = QPushButton("Train Model")
@@ -63,7 +61,6 @@ class ModelTrainScreen(QWidget):
                         background-color: #42A049;
                     }
                 """)
-
 
         self.upload_validation_btn = QPushButton("Upload Validation Images")
         self.upload_train_btn = QPushButton("upload Training images")
@@ -83,13 +80,12 @@ class ModelTrainScreen(QWidget):
         button_layout.addWidget(self.select_capture_folder_btn)
         button_layout.addWidget(self.capture_btn)
 
-
         self.main_layout = QHBoxLayout()
-        self.camera=CameraView()
+        self.camera = CameraView()
         self.main_layout.addWidget(self.camera)
 
         self.main_layout.addLayout(button_layout)
-#
+        #
         self.central_layout = QVBoxLayout()
         self.central_layout.addLayout(self.main_layout)
 
@@ -97,8 +93,9 @@ class ModelTrainScreen(QWidget):
         central_widget.setLayout(self.central_layout)
         self.setLayout(self.central_layout)
         self.connect_signals()
+
     def update_model_name(self):
-        self.new_Model_name=self.new_Model_name_field.toPlainText()
+        self.new_Model_name = self.new_Model_name_field.toPlainText()
 
     def connect_signals(self):
         self.upload_train_btn.clicked.connect(self.upload_train_images)
@@ -108,19 +105,12 @@ class ModelTrainScreen(QWidget):
         self.capture_btn.clicked.connect(self.capture_image)
         self.new_Model_name_field.textChanged.connect(self.update_model_name)
 
-
-
-
     def capture_image(self):
         try:
 
-            self.camera.shoot=True
+            self.camera.shoot = True
         except Exception as e:
             raise MyAppException(e)
-
-
-
-
 
     def upload_train_images(self):
         folder = QFileDialog.getExistingDirectory(self, "Select a Folder for Training Images ")
@@ -132,29 +122,41 @@ class ModelTrainScreen(QWidget):
         folder = QFileDialog.getExistingDirectory(self, "Select a Folder for Validation Images ")
         if folder:
             self.val_dir = folder
-            raise  MyAppException(f"Validation images folder: {folder}")
+            raise MyAppException(f"Validation images folder: {folder}")
 
     def train_model(self):
-        if not self.train_dir or not self.val_dir or self.new_Model_name:
-            raise MyAppException("Please select both train and validation image folders and new model name then re try.")
+        if not self.train_dir or not self.val_dir or not self.new_Model_name:
+            raise MyAppException(
+                "Please select both train and validation image folders and new model name then re try.")
 
         try:
-            datagen = ImageDataGenerator(rescale=1.0 / 255)
+            train_datagen = ImageDataGenerator(rescale=1.0 / 255,
+                                         rotation_range=15,
+                                         zoom_range=0.1,
+                                         width_shift_range=0.1,
+                                         height_shift_range=0.1,
+                                         shear_range=0.1,
+                                         horizontal_flip=True,
+                                         fill_mode='nearest')
 
-            train_data = datagen.flow_from_directory(
+            train_data = train_datagen.flow_from_directory(
                 self.train_dir,
                 target_size=(128, 128),
                 color_mode='rgb',
                 class_mode='sparse',
-                batch_size=32
+                batch_size=32,
+                seed=123,
+                shuffle=True
             )
+            validation_datagen = ImageDataGenerator(rescale=1.0 / 255)
 
-            val_data = datagen.flow_from_directory(
+            val_data = validation_datagen.flow_from_directory(
                 self.val_dir,
                 target_size=(128, 128),
                 color_mode='rgb',
                 class_mode='sparse',
                 batch_size=32
+
             )
 
             model = Sequential([
@@ -173,8 +175,6 @@ class ModelTrainScreen(QWidget):
 
             model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-
-
             model.fit(train_data, validation_data=val_data, epochs=10)
 
             model.save(f"models/{self.new_Model_name}_classifier.h5")
@@ -190,4 +190,4 @@ class ModelTrainScreen(QWidget):
         folder = QFileDialog.getExistingDirectory(self, "Select Capture Data Folder")
         if folder:
             CameraView._capture_dir = folder
-            CustomExceptionLogBox.log (text=f"Capture data folder selected: {folder}")
+            CustomExceptionLogBox.log(text=f"Capture data folder selected: {folder}")

@@ -32,8 +32,6 @@ class MainWindow(QMainWindow):
         CameraView._camIndex=0
         # signal connections
 
-
-
         self.ModelTrainScreen = ModelTrainScreen(self)
         self.menu_bar = MymenuBar(self)
         self.ModelTrainScreen.newModel_trained_Signal.connect(self.InspectionScreen.load_model_list)
@@ -63,7 +61,7 @@ def handleCustomExceptions(exception_logger):
 
 
     def global_exception_handler(exc_type, exc_value, exc_traceback):
-        error_message = "".join(traceback.format_exception(exc_type, exc_value,None))
+        error_message = "".join(traceback.format_exception(exc_type, exc_value,exc_traceback))
         if exc_type == MyAppException:
             exception_logger.log(f"\u26A0 Custom Exception:\n{error_message}")
             MyLogging.log_error(error_message)
@@ -71,8 +69,6 @@ def handleCustomExceptions(exception_logger):
         else:
             exception_logger.log(f"\u274C Uncaught Exception:\n{error_message}")
             MyLogging.log_error(error_message)
-
-
 
     sys.excepthook = global_exception_handler
 
